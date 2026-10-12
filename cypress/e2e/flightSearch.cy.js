@@ -4,6 +4,7 @@ describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
   it("Berhasil memesan penerbangan one-way dari Jakarta ke Singapura untuk tanggal besok", () => {
     // 1. Buka beranda Agoda & pilih tab Flight
     flightPage.visit();
+    flightPage.closeAppPromoPopup();
     flightPage.clickFlightTab();
 
     // 2. Pilih opsi penerbangan One Way

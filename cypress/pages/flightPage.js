@@ -5,6 +5,15 @@ class FlightPage {
     cy.visit("https://www.agoda.com");
   }
 
+  closeAppPromoPopup() {
+    cy.get("body").then(($body) => {
+      // Mengecek apakah elemen pop-up ada di halaman
+      if ($body.find(flightLocators.CLOSE_POPUP).length > 0) {
+        cy.get(flightLocators.CLOSE_POPUP).click({ force: true });
+      }
+    });
+  }
+
   clickFlightTab() {
     cy.get(flightLocators.FLIGHT_TAB).click();
   }
@@ -14,11 +23,13 @@ class FlightPage {
   }
 
   enterFlyingFrom(origin = "Jakarta (CGK)") {
-    cy.get(flightLocators.FLYING_FROM_INPUT).type(`${origin}{enter}`);
+    cy.get(flightLocators.FLYING_FROM_INPUT).click().clear().type(origin);
   }
 
   enterFlyingTo(destination = "Singapore (SIN)") {
-    cy.get(flightLocators.FLYING_TO_INPUT).type(`${destination}{enter}`);
+    cy.get(flightLocators.FLYING_TO_INPUT).click().clear().type(destination);
+    cy.get(flightLocators.SUGGESTION_ITEM).first().click();
+    cy.get("body").type("{esc}");
   }
 
   selectDepartureDateTomorrow() {
