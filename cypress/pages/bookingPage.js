@@ -165,14 +165,27 @@ class BookingPage {
   // Panggil SETELAH semua opsi dipilih dan SEBELUM klik continue,
   // karena harga bisa berubah akibat support level / travel protection.
   captureTotalPrice() {
-    cy.get(bookingLocators.TOTAL_PRICE)
-      .first()
-      .scrollIntoView()
-      .invoke("text")
-      .then((text) => {
-        const price = text.match(/\d[\d.,]*/);
-        expect(price, `angka harga ditemukan di "${text}"`).to.not.be.null;
-        cy.wrap(price[0]).as("totalPrice");
+    let finalPrice;
+
+    cy.get(bookingLocators.TOTAL_PRICE, { timeout: 15000 })
+      .should(($els) => {
+        const texts = $els
+          .toArray()
+          .map((el) => el.textContent.trim())
+          .filter((text) => /\d/.test(text));
+
+        expect(
+          texts,
+          "ada elemen total price yang berisi angka",
+        ).to.have.length.greaterThan(0);
+
+        const prices = texts[0].match(/\d[\d.,]*/g);
+        // Angka terakhir = harga final (setelah diskon)
+        finalPrice = prices[prices.length - 1];
+      })
+      .then(() => {
+        cy.log(`Total price tersimpan: ${finalPrice}`);
+        cy.wrap(finalPrice).as("totalPrice");
       });
   }
 
@@ -183,7 +196,40 @@ class BookingPage {
       .and("not.be.disabled")
       .click();
 
+    // Tutup penawaran "last chance" kalau muncul
+    this.declineLastChanceOffers();
+
     cy.url({ timeout: 30000 }).should("include", "/packages/payment");
+  }
+
+  // Modal ini tidak selalu muncul dan bisa lebih dari satu, jadi ditangani
+  // secara kondisional. maxOffers mencegah loop tak berujung.
+  declineLastChanceOffers(maxOffers = 3) {
+    if (maxOffers === 0) return;
+
+    const decline = `${bookingLocators.LAST_CHANCE_DECLINE}:visible`;
+
+    // Tunggu salah satu terjadi: pindah ke payment ATAU modal muncul
+    cy.get("body", { timeout: 30000 }).should(($body) => {
+      const onPayment =
+        $body[0].ownerDocument.location.pathname.includes("/packages/payment");
+      const offerVisible = $body.find(decline).length > 0;
+      expect(
+        onPayment || offerVisible,
+        "pindah ke payment atau modal last-chance muncul",
+      ).to.be.true;
+    });
+
+    cy.get("body").then(($body) => {
+      if ($body.find(decline).length === 0) return;
+
+      cy.get(decline).first().click();
+
+      // Pastikan modal tertutup sebelum cek penawaran berikutnya
+      cy.get("body").find(decline).should("not.exist");
+
+      this.declineLastChanceOffers(maxOffers - 1);
+    });
   }
 }
 

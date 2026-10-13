@@ -37,8 +37,12 @@ const bookingLocators = {
   TERMS_CONTAINER: '[data-component="terms-and-privacy-text-container"]',
   CONTINUE_PAYMENT: '[data-testid="continue-to-payment-button"]',
 
-  // TODO: BELUM ADA DATANYA. Kirim HTML elemen total harga di halaman booking.
-  TOTAL_PRICE: '[data-testid="GANTI_DENGAN_LOCATOR_TOTAL_PRICE"]',
+  // Total harga final di price breakdown (setelah diskon)
+
+  TOTAL_PRICE: '[data-component="mob-flight-price-total-desc"]',
+
+  // Modal "last chance" setelah klik Continue (mis. Upgrade your support level)
+  LAST_CHANCE_DECLINE: '[data-component="last-chance-decline-button"]',
 };
 
 export default bookingLocators;
