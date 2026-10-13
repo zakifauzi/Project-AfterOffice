@@ -1,5 +1,5 @@
 import flightPage from "../pages/flightPage";
-import flightResultPage from "../pages/flightResultPage";
+import flightResultPage from "../pages/FlightResultPage";
 
 describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
   it("Berhasil memesan penerbangan one-way dari Jakarta ke Singapura untuk tanggal besok", () => {
@@ -23,9 +23,12 @@ describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
     flightPage.clickSearchFlights();
 
     // 6. Urutkan berdasarkan keberangkatan paling awal
-    flightResultPage.sortBy(/departure time.*earli/i);
+    flightResultPage.sortBy(/^departure time/i);
 
     // 7. Filter maskapai Malaysia Airlines
     flightResultPage.filterAirline("Malaysia Airlines");
+
+    // 8. Pilih penerbangan pertama, lalu pastikan masuk halaman booking
+    flightResultPage.selectFirstFlight();
   });
 });

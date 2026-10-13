@@ -130,10 +130,6 @@ class FlightPage {
       .first()
       .should("be.visible")
       .click();
-
-    // Validasi bahwa pencarian benar-benar jalan, bukan sekadar tombol terklik
-    // cy.contains("Please enter the origin, destination").should("not.exist");
-    // cy.url().should("include", "/flights/");
   }
 }
 

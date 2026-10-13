@@ -31,8 +31,10 @@ const flightLocators = {
 
   // Hasil pencarian: sort & filter
   SORT_BUTTON: '[data-testid="flights-quick-sort-item-other-button"]',
-  SORT_LISTBOX: '[aria-labelledby="sort-options-label"]',
-  SORT_OPTION: '[aria-labelledby="sort-options-label"] button[role="option"]',
+  SORT_OPTION: 'button[role="option"]',
+
+  //memilih penerbangan
+  SELECT_BUTTON: '[data-testid="flight-detail-select-button"]',
 };
 
 export default flightLocators;
