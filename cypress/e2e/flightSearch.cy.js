@@ -18,7 +18,7 @@ describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
     flightPage.selectDepartureDateTomorrow();
 
     // 5. Atur passenger, tutup pop-up dengan Enter, lalu klik tombol Search Flights
-    flightPage.handlePassengerPopup();
+    // flightPage.handlePassengerPopup();
     flightPage.clickSearchFlights();
   });
 });

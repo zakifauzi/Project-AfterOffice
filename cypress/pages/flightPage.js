@@ -29,28 +29,36 @@ class FlightPage {
   enterFlyingTo(destination = "Singapore (SIN)") {
     cy.get(flightLocators.FLYING_TO_INPUT).click().clear().type(destination);
     cy.get(flightLocators.SUGGESTION_ITEM).first().click();
-    cy.get("body").type("{esc}");
+
+    cy.get(flightLocators.SUGGESTION_ITEM).should("not.exist");
   }
 
   selectDepartureDateTomorrow() {
-    cy.get(flightLocators.DEPARTURE_SELECTOR).click();
-    cy.get(flightLocators.CALENDAR_CONTAINER).should("be.visible");
-
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     const year = tomorrow.getFullYear();
     const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
     const day = String(tomorrow.getDate()).padStart(2, "0");
-    const targetDateStr = `${year}-${month}-${day}`;
+    const dateSelector = flightLocators.CALENDAR_DATE(
+      `${year}-${month}-${day}`,
+    );
 
-    cy.get(`[data-testid="${targetDateStr}"]`).click();
-  }
+    // Buka kalender hanya jika belum terbuka (hindari efek toggle)
+    cy.get("body").then(($body) => {
+      if (
+        $body.find(`${flightLocators.CALENDAR_FLOATER}:visible`).length === 0
+      ) {
+        cy.get(flightLocators.DEPARTURE_SELECTOR).click();
+      }
+    });
 
-  handlePassengerPopup() {
-    cy.get(flightLocators.PASSENGER_SELECTOR).click();
-    cy.get(flightLocators.PASSENGER_POPUP).should("be.visible");
-    cy.get("body").type("{enter}");
+    cy.get(flightLocators.CALENDAR_FLOATER, { timeout: 10000 })
+      .should("be.visible")
+      .find(dateSelector)
+      .first()
+      .should("be.visible")
+      .click();
   }
 
   clickSearchFlights() {

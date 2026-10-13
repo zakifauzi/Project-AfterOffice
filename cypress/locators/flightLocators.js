@@ -15,12 +15,9 @@ const flightLocators = {
   SUGGESTION_ITEM: '[id*="-option-1"]',
   // Tanggal Keberangkatan (Departure) & Kalender
   DEPARTURE_SELECTOR: "#flight-departure > .Box-sc-kv6pi1-0",
-  CALENDAR_CONTAINER: "#dateSelector-calendar",
-  CALENDAR_ROOT: '[class="rdp-root ads-date-picker"]',
-  CALENDAR_MONTHS: '[class="rdp-months"]',
-  CALENDAR_WEEKDAY: '[class="rdp-weekday"]',
-  CALENDAR_WEEKS: '[class="rdp-weeks"]',
-
+  CALENDAR_FLOATER: '[data-testid="floater-container"]',
+  CALENDAR_DATE: (date) =>
+    `[data-selenium-date="${date}"], [data-day="${date}"]`,
   // Penumpang (Passenger) & Tombol Cari
   PASSENGER_SELECTOR: '[data-component="flight-search-occupancy"]',
   PASSENGER_POPUP: '[class="Popup__content"]',
