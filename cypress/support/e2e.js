@@ -16,3 +16,19 @@
 // Import commands.js using ES2015 syntax:
 import "./commands";
 import "cypress-mochawesome-reporter/register";
+
+// cypress/support/e2e.js
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  // Mengabaikan error ResizeObserver agar test automation tidak gagal (false positive)
+  if (
+    err.message.includes(
+      "ResizeObserver loop completed with undelivered notifications",
+    )
+  ) {
+    return false;
+  }
+
+  // Biarkan error lain tetap menggagalkan test jika itu bug fungsional yang sebenarnya
+  return true;
+});
