@@ -1,4 +1,5 @@
 import flightPage from "../pages/flightPage";
+import flightResultPage from "../pages/flightResultPage";
 
 describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
   it("Berhasil memesan penerbangan one-way dari Jakarta ke Singapura untuk tanggal besok", () => {
@@ -10,15 +11,21 @@ describe("Skenario Pencarian Penerbangan Agoda E2E", () => {
     // 2. Pilih opsi penerbangan One Way
     flightPage.selectOneWay();
 
-    // 3. Masukkan kota asal (Jakarta) dan tujuan (Singapura) + Enter
-    flightPage.enterFlyingFrom("Jakarta (CGK)");
-    flightPage.enterFlyingTo("Singapore (SIN)");
+    // 3. Pilih kota asal (Jakarta - CGK) dan tujuan (Singapore - SIN) dari suggestion
+    flightPage.enterFlyingFrom("Jakarta", "CGK");
+    flightPage.enterFlyingTo("Singapore", "SIN");
 
-    // 4. Pilih tanggal keberangkatan otomatis (current date + 1)
+    // 4. Pilih tanggal keberangkatan besok
     flightPage.selectDepartureDateTomorrow();
 
-    // 5. Atur passenger, tutup pop-up dengan Enter, lalu klik tombol Search Flights
-    // flightPage.handlePassengerPopup();
+    // 5. Passenger memakai default (1 Passenger, Economy). Verifikasi form, lalu Search
+    flightPage.verifyFormFilled("CGK", "SIN");
     flightPage.clickSearchFlights();
+
+    // 6. Urutkan berdasarkan keberangkatan paling awal
+    flightResultPage.sortBy(/departure time.*earli/i);
+
+    // 7. Filter maskapai Malaysia Airlines
+    flightResultPage.filterAirline("Malaysia Airlines");
   });
 });
