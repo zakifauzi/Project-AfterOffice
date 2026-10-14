@@ -1,28 +1,21 @@
 import flightLocators from "../locators/flightLocators";
 
+const TIME_FORMAT = /^\d{2}:\d{2}$/;
+
 class FlightResultPage {
-  /**
-   * Buka dropdown "Sort by" lalu pilih opsi berdasarkan teks.
-   * @param {RegExp|string} optionText - judul opsi, mis. /^departure time/i
-   */
   sortBy(optionText = /^departure time/i) {
-    // 1. Buka dropdown
     cy.get(flightLocators.SORT_BUTTON, { timeout: 20000 })
       .filter(":visible")
       .first()
       .click();
 
-    // 2. Ambil elemen <button role="option"> yang memuat teks (BUKAN span di dalamnya)
     cy.contains(flightLocators.SORT_OPTION, optionText, { timeout: 10000 })
       .should("be.visible")
       .click();
 
-    // 3. Verifikasi: opsi yang dipilih benar-benar aktif
-    //    (buka lagi tidak perlu; cukup cek state dropdown tertutup + sort button berubah)
     cy.get(flightLocators.SORT_OPTION).should("not.exist");
   }
 
-  // Filter maskapai berdasarkan nama
   filterAirline(airlineName = "Malaysia Airlines") {
     cy.contains(new RegExp(airlineName, "i"), { timeout: 20000 })
       .scrollIntoView()
@@ -30,7 +23,44 @@ class FlightResultPage {
       .click();
   }
 
+  // Simpan jam berangkat & tiba dari kartu yang memiliki tombol Select pertama.
+  // Jam dibaca dari baris ringkasan kartu (FLIGHT_SUMMARY), karena rincian
+  // segmen di dalam kartu juga memakai data-testid="departure-time".
+  captureSelectedFlightTimes() {
+    let times;
+
+    cy.get(flightLocators.SELECT_BUTTON, { timeout: 20000 })
+      .filter(":visible")
+      .first()
+      .closest(flightLocators.FLIGHT_CARD)
+      .should(($card) => {
+        const summary = $card.find(flightLocators.FLIGHT_SUMMARY).first();
+        const departure = summary
+          .find(flightLocators.DEPARTURE_TIME)
+          .first()
+          .text()
+          .trim();
+        const arrival = summary
+          .find(flightLocators.ARRIVAL_TIME)
+          .first()
+          .text()
+          .trim();
+
+        expect(departure, "departure time di kartu").to.match(TIME_FORMAT);
+        expect(arrival, "arrival time di kartu").to.match(TIME_FORMAT);
+
+        times = { departure, arrival };
+      })
+      .then(() => {
+        cy.log(`Jam tersimpan: ${times.departure} - ${times.arrival}`);
+        cy.wrap(times).as("flightTimes");
+      });
+  }
+
+  // Simpan jam dulu, baru klik Select, lalu pastikan pindah ke halaman booking
   selectFirstFlight() {
+    this.captureSelectedFlightTimes();
+
     cy.get(flightLocators.SELECT_BUTTON, { timeout: 20000 })
       .filter(":visible")
       .first()
@@ -38,7 +68,6 @@ class FlightResultPage {
       .should("be.visible")
       .click();
 
-    // Halaman booking menjadi bukti bahwa klik berhasil
     cy.url({ timeout: 30000 }).should("include", "/packages/book");
   }
 }

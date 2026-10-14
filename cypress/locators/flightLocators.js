@@ -12,7 +12,6 @@ const flightLocators = {
   FLYING_TO_INPUT: '[data-selenium="flight-destination-search-input"]',
 
   // Suggestion dropdown: dipilih berdasarkan kode bandara.
-  // place-type="1" = bandara (place-type="0" = "All airports" untuk satu kota)
   SUGGESTION_ORIGIN: (code) =>
     `[data-element-name="flight-origin-search-result"][data-element-object-id="${code}"][data-element-place-type="1"]`,
   SUGGESTION_DESTINATION: (code) =>
@@ -35,6 +34,13 @@ const flightLocators = {
 
   //memilih penerbangan
   SELECT_BUTTON: '[data-testid="flight-detail-select-button"]',
+
+  // Kartu penerbangan di halaman hasil (dipakai untuk menyimpan jam berangkat & tiba)
+  FLIGHT_CARD: '[data-testid="GANTI_DENGAN_LOCATOR_KARTU"]',
+  FLIGHT_CARD: '[data-testid="web-refresh-flights-card"]',
+  FLIGHT_SUMMARY: '[data-testid="flightCard-flight-detail"]',
+  DEPARTURE_TIME: '[data-testid="departure-time"]',
+  ARRIVAL_TIME: '[data-testid="arrival-time"]',
 };
 
 export default flightLocators;

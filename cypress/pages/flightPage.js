@@ -34,7 +34,7 @@ const getTomorrow = () => {
 
 class FlightPage {
   visit() {
-    cy.visit("https://www.agoda.com");
+    cy.visit(Cypress.expose("BASE_URL"));
   }
 
   closeAppPromoPopup() {

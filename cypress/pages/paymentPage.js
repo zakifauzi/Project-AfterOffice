@@ -1,9 +1,11 @@
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 class PaymentPage {
-  // Pastikan teks tampil di halaman (case-insensitive, auto-retry)
+  // Pastikan teks tampil di halaman (case-insensitive, spasi fleksibel, auto-retry)
   expectPageToShow(text, label) {
-    cy.contains(new RegExp(escapeRegExp(text), "i"), { timeout: 20000 })
+    const pattern = escapeRegExp(text).replace(/\s+/g, "\\s+");
+
+    cy.contains(new RegExp(pattern, "i"), { timeout: 20000 })
       .should("exist")
       .then(() => cy.log(`OK: ${label} "${text}" tampil di halaman payment`));
   }
@@ -12,11 +14,26 @@ class PaymentPage {
     cy.url({ timeout: 30000 }).should("include", "/packages/payment");
   }
 
-  // Data penumpang sama dengan yang diisi di halaman passenger detail
+  // Data kontak & penumpang sama dengan yang diisi di halaman passenger detail
   verifyPassengerData({ contact, passenger }) {
-    this.expectPageToShow(contact.firstName, "contact first name");
+    // Nama kontak lengkap (first + last), bukan hanya first name
+    this.expectPageToShow(
+      `${contact.firstName} ${contact.lastName}`,
+      "contact name",
+    );
     this.expectPageToShow(contact.email, "email");
-    this.expectPageToShow(passenger.givenName, "passenger given name");
+    this.expectPageToShow(
+      `${contact.phoneCode} ${contact.phone}`,
+      "mobile number",
+    );
+
+    // Penumpang tanpa surname: Agoda menampilkan given name dua kali
+    // (teramati di halaman passenger detail dan payment: "BUDI BUDI")
+    this.expectPageToShow(
+      `${passenger.givenName} ${passenger.givenName}`,
+      "passenger name",
+    );
+    this.expectPageToShow(passenger.passport.number, "passport number");
   }
 
   // Total price sama dengan yang tersimpan dari halaman booking
