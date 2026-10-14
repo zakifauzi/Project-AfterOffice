@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "cy:run:agoda": "cypress run --browser chrome --spec cypress/e2e/flightSearch.cy.js",
+    "cy:run:amazon": "cypress run --browser chrome --spec cypress/e2e/amazonSearch.cy.js",
+    "cy:run:all": "cypress run --browser chrome"
+  },
   "devDependencies": {
     "cypress": "^16.1.1",
     "cypress-mochawesome-reporter": "^5.0.0"
