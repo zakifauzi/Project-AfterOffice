@@ -22,6 +22,10 @@ export const amazonLocators = {
   },
   offers: {
     panel: "#aod-offer-list",
+    // ID duplikat (sticky + pinned), jadi selalu pakai .first()
+    title: "#aod-asin-title-text",
+    // Harga offer pertama (teks offscreen, mis. "$43,770.00")
+    price: "#aod-offer-list #aod-price-1 .apex-pricetopay-accessibility-label",
     addToCart: '#aod-offer-list input[name="submit.addToCart"]',
   },
 };

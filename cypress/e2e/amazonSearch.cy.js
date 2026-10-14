@@ -16,6 +16,12 @@ describe("Amazon search", () => {
         resultPage.getRightmostFirstRowItem().then((item) => {
           resultPage.clickSeeOptions(item);
           productPage.clickSeeAllBuyingOptions();
+
+          productPage.readOffer().then((offer) => {
+            productPage.assertOffer(offer, item.name);
+            productPage.assertAddToCartPrice(offer);
+          });
+
           productPage.clickAddToCart();
         });
       },
