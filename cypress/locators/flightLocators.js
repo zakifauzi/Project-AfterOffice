@@ -4,21 +4,25 @@ const flightLocators = {
   ONE_WAY_RADIO: '[data-element-object-id="one-way"]',
 
   // Pop up promo aplikasi
-  CLOSE_POPUP: '[data-element-test="prominent-app-download-popover"] button[aria-label="Close"]',
+  CLOSE_POPUP:
+    '[data-element-test="prominent-app-download-popover"] button[aria-label="Close"]',
 
   // Form Input Lokasi (Asal & Tujuan)
   FLYING_FROM_INPUT: '[data-selenium="flight-origin-search-input"]',
   FLYING_TO_INPUT: '[data-selenium="flight-destination-search-input"]',
 
   // Suggestion dropdown: dipilih berdasarkan kode bandara.
-  SUGGESTION_ORIGIN: (code) => `[data-element-name="flight-origin-search-result"][data-element-object-id="${code}"][data-element-place-type="1"]`,
-  SUGGESTION_DESTINATION: (code) => `[data-element-name="flight-destination-search-result"][data-element-object-id="${code}"][data-element-place-type="1"]`,
+  SUGGESTION_ORIGIN: (code) =>
+    `[data-element-name="flight-origin-search-result"][data-element-object-id="${code}"][data-element-place-type="1"]`,
+  SUGGESTION_DESTINATION: (code) =>
+    `[data-element-name="flight-destination-search-result"][data-element-object-id="${code}"][data-element-place-type="1"]`,
 
   // Tanggal Keberangkatan & Kalender
   DEPARTURE_SELECTOR: "#flight-departure > .Box-sc-kv6pi1-0",
   DEPARTURE_FIELD: "#flight-departure",
   CALENDAR_FLOATER: '[data-testid="floater-container"]',
-  CALENDAR_DATE_IN_FLOATER: (date) => `[data-testid="floater-container"] [data-selenium-date="${date}"], [data-testid="floater-container"] [data-day="${date}"]`,
+  CALENDAR_DATE_IN_FLOATER: (date) =>
+    `[data-testid="floater-container"] [data-selenium-date="${date}"], [data-testid="floater-container"] [data-day="${date}"]`,
 
   // Popup passenger (dipakai untuk menutupnya sebelum Search) & tombol cari
   PASSENGER_POPUP: '[class="Popup__content"]',
@@ -33,6 +37,10 @@ const flightLocators = {
 
   // Kartu penerbangan di halaman hasil (dipakai untuk menyimpan jam berangkat & tiba)
   FLIGHT_CARD: '[data-testid="GANTI_DENGAN_LOCATOR_KARTU"]',
+  FLIGHT_CARD: '[data-testid="web-refresh-flights-card"]',
+  FLIGHT_SUMMARY: '[data-testid="flightCard-flight-detail"]',
+  DEPARTURE_TIME: '[data-testid="departure-time"]',
+  ARRIVAL_TIME: '[data-testid="arrival-time"]',
 };
 
 export default flightLocators;
